@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../redux/slices/authSlice';
+import { login, logout } from '../redux/slices/authSlice';
 import Logo from '../assets/Logo.svg';
 import toast from 'react-hot-toast';
 import appwriteAuth from '../utils/appwrite/appwriteAuth';
@@ -9,8 +9,21 @@ import appwriteAuth from '../utils/appwrite/appwriteAuth';
 const Header = () => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { cartItems } = useSelector(state => state.cart);
   const { isAuthenticated } = useSelector(state => state.auth);
+
+  useEffect(() => {
+    appwriteAuth.getCurrentUser()
+      .then(user => {
+        if (user) {
+          dispatch(login(user));
+        } else {
+          dispatch(logout());
+        }
+      });
+  }, [navigate]);
 
   const handleLogout = async () => {
     try {

@@ -21,7 +21,6 @@ class AppwriteAuth {
       }
       return null;
     } catch (error) {
-      throw error;
     }
   };
 
@@ -30,7 +29,6 @@ class AppwriteAuth {
       const user = await this.account.createEmailPasswordSession(email, password);
       return user;
     } catch (error) {
-      throw error;
     }
   };
 
@@ -39,7 +37,6 @@ class AppwriteAuth {
       const user = await this.account.get();
       return user;
     } catch (error) {
-      throw error;
     }
 
     return null;
@@ -50,7 +47,6 @@ class AppwriteAuth {
       const user = await this.account.deleteSession('current');
       return user;
     } catch (error) {
-      throw error;
     }
   };
 

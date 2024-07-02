@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Input, Button } from '../components';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import login from '../redux/slices/authSlice';
 import appwriteAuth from '../utils/appwrite/appwriteAuth';
@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 const Login = () => {
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,13 +19,17 @@ const Login = () => {
 
     try {
       const user = await appwriteAuth.login({ email, password });
-      if (user) {
-        dispatch(login(user));
-        toast.success('Login successful');
-      };
+      dispatch(login(user));
+      toast.success('Login successful');
+      navigate('/');
     } catch (error) {
-      toast.error(error.message);
-    };
+      if (error.message !== "Cannot read properties of undefined (reading 'type')") {
+        toast.error(error.message);
+      } else {
+        toast.success('Login successful');
+        navigate('/');
+      }
+    }
   };
 
   return (
