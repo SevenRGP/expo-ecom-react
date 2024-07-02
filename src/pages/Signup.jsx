@@ -3,14 +3,30 @@ import { Input, Button } from '../components';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import login from '../redux/slices/authSlice';
+import appwriteAuth from '../utils/appwrite/appwriteAuth';
+import toast from 'react-hot-toast';
 
 const Signup = () => {
 
+  const dispatch = useDispatch();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
 
   const handleSignup = async (e) => {
     e.preventDefault();
+
+    try {
+      const user = await appwriteAuth.createUser({ email, password, name });
+      if (user) {
+        const sessionId = user.$id;
+        dispatch(login({ user, sessionId }));
+        toast.success('Signup successful');
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   return (
@@ -21,6 +37,17 @@ const Signup = () => {
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center">Welcome to Expo</h2>
         <form onSubmit={handleSignup}>
+          <div className="mb-4">
+            <Input
+              id="name"
+              type="name"
+              label={"Name"}
+              placeholder="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
+          </div>
           <div className="mb-4">
             <Input
               id="email"

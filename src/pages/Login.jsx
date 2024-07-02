@@ -1,14 +1,31 @@
 import React, { useState } from 'react';
 import { Input, Button } from '../components';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import login from '../redux/slices/authSlice';
+import appwriteAuth from '../utils/appwrite/appwriteAuth';
+import toast from 'react-hot-toast';
 
 const Login = () => {
+
+  const dispatch = useDispatch();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    try {
+      const user = await appwriteAuth.login({ email, password });
+      if (user) {
+        const sessionId = user.$id;
+        dispatch(login({ user, sessionId }));
+        toast.success('Login successful');
+      };
+    } catch (error) {
+      toast.error(error.message);
+    };
   };
 
   return (
@@ -36,7 +53,7 @@ const Login = () => {
               type="password"
               label="Password"
               placeholder="Enter your password"
-              value={password} s
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />

@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Home, Cart, SingleProduct, Login, Signup } from './pages';
 import { Header, Footer } from './components';
 import { Toaster } from 'react-hot-toast';
 import ScrollToTop from './utils/ScrollToTop';
+import appwriteAuth from './utils/appwrite/appwriteAuth';
+import { useDispatch } from 'react-redux';
+import { login, logout } from './redux/slices/authSlice';
 
 const App = () => {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    appwriteAuth.getCurrentUser()
+      .then(user => {
+        if (user) {
+          dispatch(login({ user: user.email, sessionId: user.$id }));
+        } else {
+          dispatch(logout());
+        }
+      });
+  }, []);
+
   return (
     <>
       <Header />
