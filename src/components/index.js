@@ -5,8 +5,6 @@ import Card from "./common/Card";
 import Loading from "./common/Loading";
 import Filter from "./Filter";
 import CartItem from "./CartItem";
-import Input from './common/Input';
-import Button from './common/Button';
 
 export {
   Header, Footer,
@@ -14,6 +12,4 @@ export {
   Loading,
   Filter,
   CartItem,
-  Input,
-  Button
 }

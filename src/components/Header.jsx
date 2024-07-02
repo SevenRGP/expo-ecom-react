@@ -1,39 +1,12 @@
-import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { login, logout } from '../redux/slices/authSlice';
 import Logo from '../assets/Logo.svg';
-import toast from 'react-hot-toast';
-import appwriteAuth from '../utils/appwrite/appwriteAuth';
 
 const Header = () => {
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
   const { cartItems } = useSelector(state => state.cart);
-  const { user, isAuthenticated } = useSelector(state => state.auth);
 
-  useEffect(() => {
-    appwriteAuth.getCurrentUser()
-      .then(userRes => {
-        if (userRes) {
-          dispatch(login(userRes));
-        } else {
-          dispatch(logout());
-        }
-      });
-  }, [navigate]);
-
-  const handleLogout = async () => {
-    try {
-      await appwriteAuth.logout();
-      dispatch(logout());
-      toast.success('Logged out');
-    } catch (error) {
-      toast.error(error.message);
-    }
-  };
 
   return (
     <>
@@ -47,14 +20,6 @@ const Header = () => {
           </Link>
 
           <div className='flex gap-2 items-center'>
-            {isAuthenticated == true && <p>Welcome, <span className='font-medium'>{user.name}</span></p>}
-            {(isAuthenticated !== true) ? (
-              <Link to='/auth/login'>
-                <button className='underline'>Login</button>
-              </Link>
-            ) : (
-              <button className='underline' onClick={handleLogout}>Logout</button>
-            )}
             <Link to='/cart'>
               <button className='w-20 bg-black text-white py-1 rounded text-[0.9rem]'>Cart ({cartItems.length})</button>
             </Link>
