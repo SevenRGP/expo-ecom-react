@@ -10,11 +10,11 @@ const Header = () => {
 
   const dispatch = useDispatch();
   const { cartItems } = useSelector(state => state.cart);
-  const { isAuthenticated, sessionId } = useSelector(state => state.auth);
+  const { isAuthenticated } = useSelector(state => state.auth);
 
   const handleLogout = async () => {
     try {
-      await appwriteAuth.logout(sessionId);
+      await appwriteAuth.logout();
       dispatch(logout());
       toast.success('Logged out');
     } catch (error) {

@@ -16,7 +16,7 @@ const App = () => {
     appwriteAuth.getCurrentUser()
       .then(user => {
         if (user) {
-          dispatch(login({ user: user.email, sessionId: user.$id }));
+          dispatch(login(user));
         } else {
           dispatch(logout());
         }

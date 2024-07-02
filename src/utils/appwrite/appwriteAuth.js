@@ -45,9 +45,9 @@ class AppwriteAuth {
     return null;
   };
 
-  logout = async (sessionId) => {
+  logout = async () => {
     try {
-      const user = await this.account.deleteSession(sessionId);
+      const user = await this.account.deleteSession('current');
       return user;
     } catch (error) {
       throw error;

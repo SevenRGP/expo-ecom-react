@@ -19,8 +19,7 @@ const Login = () => {
     try {
       const user = await appwriteAuth.login({ email, password });
       if (user) {
-        const sessionId = user.$id;
-        dispatch(login({ user, sessionId }));
+        dispatch(login(user));
         toast.success('Login successful');
       };
     } catch (error) {
