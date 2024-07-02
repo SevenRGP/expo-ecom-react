@@ -12,13 +12,13 @@ const Header = () => {
   const navigate = useNavigate();
 
   const { cartItems } = useSelector(state => state.cart);
-  const { isAuthenticated } = useSelector(state => state.auth);
+  const { user, isAuthenticated } = useSelector(state => state.auth);
 
   useEffect(() => {
     appwriteAuth.getCurrentUser()
-      .then(user => {
-        if (user) {
-          dispatch(login(user));
+      .then(userRes => {
+        if (userRes) {
+          dispatch(login(userRes));
         } else {
           dispatch(logout());
         }
@@ -46,7 +46,8 @@ const Header = () => {
             />
           </Link>
 
-          <div className='flex gap-2'>
+          <div className='flex gap-2 items-center'>
+            {isAuthenticated == true && <p>Welcome, <span className='font-medium'>{user.name}</span></p>}
             {(isAuthenticated !== true) ? (
               <Link to='/auth/login'>
                 <button className='underline'>Login</button>
